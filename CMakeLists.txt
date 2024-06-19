@@ -25,4 +25,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #=== Main App ===
 
 # Create executable
-add_executable(${APP_NAME} src/main.cpp)
+add_executable(${APP_NAME} ${SOURCES})
