@@ -1,9 +1,7 @@
+#ifndef MAZE_HPP
+#define MAZE_HPP
 #include <array>
 #include <cstdio>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -76,3 +74,4 @@ class Maze {
     }
 };
 } // namespace maze
+#endif // !MAZE_HPP
