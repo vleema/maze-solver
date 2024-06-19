@@ -39,36 +39,7 @@ class Maze {
     };
 
     /// Constructor
-    Maze(const std::string &filename) {
-        std::ifstream ifs_file(filename);
-        if (not ifs_file.is_open()) {
-            throw std::invalid_argument("Couldn't open file: " + filename);
-        }
-        std::string file_line;
-        size_t line_count = 0;
-        bool first_line = true;
-        while (std::getline(ifs_file, file_line)) {
-            if (first_line) {
-                std::istringstream iss(file_line);
-                iss >> m_height >> m_width;
-                resize_maze();
-                first_line = false;
-                continue;
-            }
-            size_t col_count = 0;
-            for (const auto &ch : file_line) {
-                if (ch == ' ' or ch == '\n')
-                    continue;
-                auto cell = (Cell)(ch - '0');
-                if (cell == Cell::Start)
-                    m_start = Position(col_count, line_count);
-                if (cell == Cell::Finish)
-                    m_finish = Position(col_count, line_count);
-                m_maze[line_count][col_count++] = cell;
-            }
-            line_count++;
-        }
-    }
+    Maze(const std::string &filename);
 
     /// Given a Position `pos` tells if `pos` is in bounds
     [[nodiscard]] bool in_bound(const Position &pos) const {
@@ -87,27 +58,7 @@ class Maze {
                m_maze[move.coord_y][move.coord_y] == Cell::Wall;
     }
     /// Converts the maze into a readable string
-    [[nodiscard]] std::string str() const {
-        const std::string wall = "█";
-        const std::string free = " ";
-        const std::string start = "Σ";
-        const std::string finish = "Ω";
-        std::ostringstream oss;
-        for (const auto &row : m_maze) {
-            for (const auto &cell : row) {
-                if (cell == Cell::Free)
-                    oss << free;
-                else if (cell == Cell::Wall)
-                    oss << wall;
-                else if (cell == Cell::Start)
-                    oss << start;
-                else if (cell == Cell::Finish)
-                    oss << finish;
-            }
-            oss << '\n';
-        }
-        return oss.str();
-    }
+    [[nodiscard]] std::string str() const;
 
   private:
     std::vector<std::vector<Cell>> m_maze;
