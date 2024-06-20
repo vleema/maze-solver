@@ -7,8 +7,8 @@
 #include <string>
 #include <utility>
 
-#include "maze.hpp"
 #include "color.h"
+#include "maze.hpp"
 
 // TODO: Implement colors in output
 
@@ -70,23 +70,26 @@ std::string Maze::str() const {
     constexpr char free = ' ';
     constexpr char start[] = "Σ";
     constexpr char finish[] = "Ω";
-    constexpr char path[] = "·"; 
+    constexpr char path[] = "█";
     std::ostringstream oss;
     for (const auto &row : m_maze) {
         for (const auto &cell : row) {
             if (cell == Cell::Free)
                 oss << free;
             else if (cell == Cell::Wall)
-                oss << wall;
+                oss << Color::tcolor(wall, Color::GREEN);
             else if (cell == Cell::Start)
-                oss << start;
+                oss << Color::tcolor(start, Color::YELLOW);
             else if (cell == Cell::Finish)
-                oss << finish;
+                oss << Color::tcolor(finish, Color::MAGENTA);
             else if (cell == Cell::Path)
-                oss << path;
+                oss << Color::tcolor(path, Color::RED);
         }
         oss << '\n';
     }
+    oss << '\n'
+        << Color::tcolor(start, Color::YELLOW) << " - Start\n"
+        << Color::tcolor(finish, Color::MAGENTA) << " - Finish\n";
     return oss.str();
 }
 
