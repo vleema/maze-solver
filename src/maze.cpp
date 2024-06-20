@@ -1,5 +1,6 @@
 #include <fstream>
 #include <istream>
+#include <list>
 #include <optional>
 #include <sstream>
 #include <stdexcept>
@@ -7,6 +8,9 @@
 #include <utility>
 
 #include "maze.hpp"
+#include "color.h"
+
+// TODO: Implement colors in output
 
 namespace {
 std::optional<std::ifstream> open_file(const std::string &filename) {
@@ -27,7 +31,7 @@ read_array_dimensions(const std::string &line) {
 } // namespace
 
 namespace maze {
-Maze::Maze(const std::string &filename) {
+Maze::Maze(const std::string &filename) : m_start(0, 0), m_finish(0, 0) {
     auto file = open_file(filename);
     if (not file.has_value())
         throw std::invalid_argument("Couldn't open file: " + filename);
@@ -66,6 +70,7 @@ std::string Maze::str() const {
     constexpr char free = ' ';
     constexpr char start[] = "Σ";
     constexpr char finish[] = "Ω";
+    constexpr char path[] = "·"; 
     std::ostringstream oss;
     for (const auto &row : m_maze) {
         for (const auto &cell : row) {
@@ -77,9 +82,23 @@ std::string Maze::str() const {
                 oss << start;
             else if (cell == Cell::Finish)
                 oss << finish;
+            else if (cell == Cell::Path)
+                oss << path;
         }
         oss << '\n';
     }
     return oss.str();
+}
+
+std::string Maze::str(std::list<Direction> &solution) const {
+    auto maze_copy(*this);
+    auto current_pos = start();
+
+    for (const auto &dir : solution) {
+        current_pos = current_pos + dir;
+        maze_copy.m_maze[current_pos.coord_y][current_pos.coord_x] =
+            (current_pos != m_finish) ? Cell::Path : Cell::Finish;
+    }
+    return maze_copy.str();
 }
 } // namespace maze
