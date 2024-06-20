@@ -6,9 +6,7 @@
 int main(int argc, char *argv[]) {
     // [1] - Parsing the data file for the maze;
     maze::Maze maze("data/out1.dat");
-    // [2] - Printing Maze
-    // std::cout << ">>> Maze without solution:\n" << maze.str();
-    // [3] - Founding a solution and printing
+    // [2] - Founding a solution and printing
     auto maze_solution = maze::Solver::solve(maze);
     if (maze_solution.has_value()) {
         std::cout << ">>> The Maze has solution!:\n"
